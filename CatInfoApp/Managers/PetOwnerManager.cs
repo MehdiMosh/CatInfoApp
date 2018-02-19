@@ -15,13 +15,23 @@ namespace CatInfoApp.Managers
             this.ownerDataProvider = ownerDataProvider;
         }
 
-
+        /// <summary>
+        /// Gets the full list of owners and creates ordered lists of pet names divided by the owner gender
+        /// </summary>
+        /// <returns>Ordered lists of pet names divided by the owner gender</returns>
         public Dictionary<Genders, List<string>> GetCatsByOwnerGender()
         {
             var owners = ownerDataProvider.GetPetOwners();
+            if (owners == null)
+                return null;
+
             var results = owners.GroupBy(x => x.Gender).Select(x => new {
                 Gender = x.Key,
-                CatNames = x.Where(p => p.Pets != null).SelectMany(p => p.Pets).Where(p => p.Type == PetType.Cat).Select(p => p.Name).OrderBy(p => p).ToList()
+                CatNames = x.Where(p => p.Pets != null)
+                            .SelectMany(p => p.Pets)
+                            .Where(p => p.Type == PetType.Cat)
+                            .Select(p => p.Name)
+                            .OrderBy(p => p).ToList()
             }).ToDictionary(x => x.Gender, x => x.CatNames);
             return results;
         }

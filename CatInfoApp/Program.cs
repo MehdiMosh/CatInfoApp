@@ -12,6 +12,12 @@ namespace CatInfoApp
             var petOwnerManager = Bootstrapper.Resolve<IPetOwnerManager>();
 
             var all = petOwnerManager.GetCatsByOwnerGender();
+            if (all == null)
+            {
+                Console.WriteLine("No Data to display...");
+                Environment.Exit(0);
+            }
+                
             foreach (var item in all)
             {
                 Console.WriteLine(item.Key);
