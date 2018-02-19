@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CatInfoApp.Bootstrap;
+using CatInfoApp.Managers.Interfaces;
+using System;
 
 namespace CatInfoApp
 {
@@ -10,6 +8,18 @@ namespace CatInfoApp
     {
         static void Main(string[] args)
         {
+            Bootstrapper.ConfigureApplication();
+            var petOwnerManager = Bootstrapper.Resolve<IPetOwnerManager>();
+
+            var all = petOwnerManager.GetCatsByOwnerGender();
+            foreach (var item in all)
+            {
+                Console.WriteLine(item.Key);
+                foreach (var catName in item.Value)
+                {
+                    Console.WriteLine("\t" + catName);
+                }
+            }
         }
     }
 }
